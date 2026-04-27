@@ -1,4 +1,4 @@
-name: "Cloud Agent CI/CD"
+name: "Dev Deployment Cloud Agent CI/CD"
 
 on:
   workflow_dispatch:
