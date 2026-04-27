@@ -55,7 +55,7 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: python ./src/app.py
+        run: python ./src/verify_connection.py
 
       - name: Run Verification Tests
         working-directory: ./
