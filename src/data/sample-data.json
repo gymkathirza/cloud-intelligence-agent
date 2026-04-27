@@ -1,0 +1,52 @@
+{
+  "agentic-ai-data-prod": [
+    {
+      "PutRequest": {
+        "Item": {
+          "ResourceId": {"S": "i-09876543210fedcba"},
+          "ResourceType": {"S": "EC2"},
+          "ResourceName": {"S": "Dev-Web-Server"},
+          "Status": {"S": "Stopped"},
+          "MonthlyCost": {"N": "0.00"},
+          "Environment": {"S": "Development"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "ResourceId": {"S": "db-master-prod-01"},
+          "ResourceType": {"S": "RDS"},
+          "ResourceName": {"S": "Production-Database"},
+          "Status": {"S": "Running"},
+          "MonthlyCost": {"N": "150.50"},
+          "Environment": {"S": "Production"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "ResourceId": {"S": "s3-static-assets-2026"},
+          "ResourceType": {"S": "S3"},
+          "ResourceName": {"S": "Global-Assets-Bucket"},
+          "Status": {"S": "Available"},
+          "MonthlyCost": {"N": "12.75"},
+          "Environment": {"S": "Production"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "ResourceId": {"S": "i-abcdef1234567890"},
+          "ResourceType": {"S": "EC2"},
+          "ResourceName": {"S": "Zombie-Instance-Test"},
+          "Status": {"S": "Running"},
+          "MonthlyCost": {"N": "45.00"},
+          "Environment": {"S": "Staging"}
+        }
+      }
+    }
+  ]
+}
