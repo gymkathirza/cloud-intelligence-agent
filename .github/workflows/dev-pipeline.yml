@@ -31,7 +31,7 @@ jobs:
 
       - name: Terraform Init
         # Force a change to local backend for dev work
-        run: terraform init -backend="local" -migrate-state
+        run: terraform init -backend-config=dev.config -migrate-state
 
       # In enterprise, we use -var-file to target specific environments
       - name: Terraform Apply
