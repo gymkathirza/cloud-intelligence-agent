@@ -30,7 +30,8 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        # Force a change to local backend for dev work
+        run: terraform init -backend="local" -migrate-state
 
       # In enterprise, we use -var-file to target specific environments
       - name: Terraform Apply
