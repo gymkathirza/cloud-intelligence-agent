@@ -12,10 +12,6 @@ permissions:
 jobs:
   terraform-and-test:
     runs-on: ubuntu-latest
-    # Set the default directory for ALL steps in this job
-    defaults:
-      run:
-        working-directory: ./infra
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -30,10 +26,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: ./infra
         run: terraform init -backend-config="prod.config"
 
       # In enterprise, we use -var-file to target specific environments
       - name: Terraform Apply
+        working-directory: ./infra
         run: terraform apply -var-file="envs/prod.tfvars" -auto-approve
 
       - name: Setup Python
@@ -42,11 +40,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
+        working-directory: ./
         run: |
-          pip install -r src/requirements.txt
+          pip install -r ./src/requirements.txt
 
       - name: Run Connection Test
+        working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: python app.py
+        run: python ./src/app.py
