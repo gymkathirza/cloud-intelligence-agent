@@ -56,3 +56,10 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: python ./src/app.py
+
+      - name: Run Verification Tests
+        working-directory: ./
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: python ./src/verify_tools.py
