@@ -1,7 +1,11 @@
 import os
 import boto3
+from typing import TYPE_CHECKING
 from crewai.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
+
+if TYPE_CHECKING:
+    from boto3.resources.base import ServiceResource
 
 # Initialize the Search Tool
 search_tool = DuckDuckGoSearchRun()
@@ -18,8 +22,8 @@ def _fetch_resource_inventory_impl():
     table_name = "agentic-ai-data-prod"
     region = os.getenv("AWS_REGION", "us-east-1")
     
-    dynamodb = boto3.resource('dynamodb', region_name=region)
-    table = dynamodb.Table(table_name)
+    dynamodb: 'ServiceResource' = boto3.resource('dynamodb', region_name=region)
+    table = dynamodb.Table(table_name)  # type: ignore
     
     try:
         response = table.scan()

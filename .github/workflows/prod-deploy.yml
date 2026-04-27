@@ -1,4 +1,4 @@
-name: "Cloud Agent CI/CD"
+name: "Production: Cloud Agent CI/CD"
 
 on:
   push:
@@ -55,4 +55,25 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: python ./src/app.py
+        run: python ./src/verify_connection.py
+
+      - name: Run Verification Tests
+        working-directory: ./
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: python ./src/verify_tools.py
+
+      - name: Run Agent Example
+        working-directory: ./
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: python ./src/agent_example.py
+
+      - name: Run Crew
+        working-directory: ./
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: python ./src/main.py
