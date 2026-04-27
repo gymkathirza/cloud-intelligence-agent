@@ -11,7 +11,7 @@ from tools import fetch_resource_inventory, aws_best_practices_search
 
 # 1. Initialize the LLM using CrewAI's native Gemini provider
 llm = GeminiCompletion(
-    model="gemini-1.5-flash-latest",
+    model="gemini-2.5-flash",
     temperature=0.5,
     api_key=os.getenv("GOOGLE_API_KEY"),
     provider="google"
