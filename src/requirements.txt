@@ -1,4 +1,6 @@
 crewai
 langchain-google-genai
+langchain-community
 boto3
 duckduckgo-search
+ddgs
