@@ -1,0 +1,56 @@
+name: "Cloud Agent CI/CD"
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual run'
+        required: false
+        default: 'Manual Dev trigger'
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read  # Required for Checkout
+
+jobs:
+  terraform-and-test:
+    runs-on: ubuntu-latest
+    # Set the default directory for ALL steps in this job
+    defaults:
+      run:
+        working-directory: ./infra
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        # Force a change to local backend for dev work
+        run: terraform init -backend-config=dev.config -migrate-state
+
+      # In enterprise, we use -var-file to target specific environments
+      - name: Terraform Apply
+        run: terraform apply -var-file="envs/dev.tfvars" -auto-approve
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Connection Test
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: python app.py
