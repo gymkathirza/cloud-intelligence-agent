@@ -1,9 +1,12 @@
 name: "Cloud Agent CI/CD"
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual run'
+        required: false
+        default: 'Manual Dev trigger'
 
 permissions:
   id-token: write # Required for OIDC
