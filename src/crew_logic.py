@@ -1,15 +1,14 @@
 import os
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process, LLM
 from langchain_google_genai import ChatGoogleGenerativeAI
-from tools import CloudInventoryTools
+from tools import CloudInventoryTools #fetch_resource_inventory, aws_best_practices_search
 
 # 1. Initialize the LLM (The Brain) [Source 8, 40]
 # We use gemini-1.5-flash-latest for optimal performance in 2026
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash-latest",
-    verbose=True,
+llm = LLM(
+    model="gemini/gemini-2.5-flash",
     temperature=0.5,
-    google_api_key=os.getenv("GOOGLE_API_KEY")
+    api_key=os.getenv("GOOGLE_API_KEY")
 )
 
 # 2. Define the Agents [Source 10]
@@ -19,7 +18,7 @@ data_researcher = Agent(
     backstory="""You are an expert in cloud resource management. You specialize 
     in scanning infrastructure databases to find inefficiencies, such as 
     unused instances or high-cost resources.""",
-    tools=[CloudInventoryTools.fetch_resource_inventory],
+    tools=[CloudInventoryTools.tools[0]],
     llm=llm,
     allow_delegation=False,
     verbose=True
@@ -31,7 +30,7 @@ cloud_strategist = Agent(
     backstory="""You are a veteran AWS Architect. You take raw data and turn it 
     into actionable business strategies. You use web search to find the 
     latest pricing and optimization whitepapers.""",
-    tools=[CloudInventoryTools.aws_best_practices_search],
+    tools=[CloudInventoryTools.tools[1]],
     llm=llm,
     allow_delegation=True,
     verbose=True
