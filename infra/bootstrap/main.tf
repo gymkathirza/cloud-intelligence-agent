@@ -4,7 +4,7 @@ provider "aws" {
 
 # 1. The S3 Bucket for Terraform State
 resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "cia-workshop-tf-state-12345" # MUST BE GLOBALLY UNIQUE! Add random numbers.
+  bucket        = "github-cia-unique-tf-state-bucket" # MUST BE GLOBALLY UNIQUE! Add random numbers.
   force_destroy = true # Ensures easy cleanup when the workshop is over
 }
 
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "state_encryption"
 
 # 2. The DynamoDB Table for State Locking
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-lock"
+  name         = "github-cia-unique-terraform-lock"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
