@@ -1,6 +1,6 @@
 name: "Production: Cloud Agent CI/CD"
 
-on:
+"on":
   # 1. Automatic: Runs CI tests on PR merge to main (to verify code before Streamlit syncs)
   push:
     branches: [ main ]
@@ -15,22 +15,22 @@ on:
         required: true
         type: boolean
         default: true
-      Connection_Test:
+      connection_test:
         description: 'Run connection test before deployment?'
         required: false
         type: boolean
         default: false
-      Tools_verification_Test:
+      tools_verification_test:
         description: 'Run tools verification tests before deployment?'
         required: false
         type: boolean
         default: false
-      Agent_Example_Test:
+      agent_example_test:
         description: 'Run agent example before deployment?'
         required: false
         type: boolean
         default: false
-      Crew_Test:
+      crew_test:
         description: 'Run crew before deployment?'
         required: false
         type: boolean
@@ -84,8 +84,8 @@ jobs:
 
       - name: Run Connection Test
         if: |
-          vars.RUN_CONNECTION_TEST == 'true' || 
-          inputs.Connection_Test == true # Optional: Only run if vars.RUN_CONNECTION_TEST or inputs.Connection_Test is set to true
+          vars.RUN_CONNECTION_TEST == 'true' ||
+          inputs.connection_test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -94,8 +94,8 @@ jobs:
 
       - name: Run Tool Verification Tests
         if: |
-          vars.RUN_TOOL_VERIFICATION_TEST == 'true' || 
-          inputs.Tools_verification_Test == true # Optional: Only run if vars.RUN_TOOL_VERIFICATION_TEST or inputs.Tools_verification_Test is set to true
+          vars.RUN_TOOL_VERIFICATION_TEST == 'true' ||
+          inputs.tools_verification_test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -105,7 +105,7 @@ jobs:
       - name: Run Agent Example
         if: |
           vars.RUN_AGENT_EXAMPLE_TEST == 'true' ||
-          inputs.Agent_Example_Test == true
+          inputs.agent_example_test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -115,7 +115,7 @@ jobs:
       - name: Run Crew
         if: |
           vars.RUN_CREW_TEST == 'true' ||
-          inputs.Crew_Test == true
+          inputs.crew_test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
