@@ -1,15 +1,47 @@
 name: "Production: Cloud Agent CI/CD"
 
 on:
+  # 1. Automatic: Runs CI tests on PR merge to main (to verify code before Streamlit syncs)
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]
+  
+  # 2. Manual: Specific trigger for AWS ECS Fargate deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy to AWS ECS Fargate environment?'
+        required: true
+        type: boolean
+        default: true
+      Connection_Test:
+        description: 'Run connection test before deployment?'
+        required: false
+        type: boolean
+        default: false
+      Tools_verification_Test:
+        description: 'Run tools verification tests before deployment?'
+        required: false
+        type: boolean
+        default: false
+      Agent_Example_Test:
+        description: 'Run agent example before deployment?'
+        required: false
+        type: boolean
+        default: false
+      Crew_Test:
+        description: 'Run crew before deployment?'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   id-token: write # Required for OIDC
   contents: read  # Required for Checkout
 
 jobs:
+  # Job 1: Infrastructure & Test (Runs on every push/merge to main)
   terraform-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -51,13 +83,19 @@ jobs:
           pip install -r ./src/requirements.txt
 
       - name: Run Connection Test
+        if: |
+          vars.RUN_CONNECTION_TEST == 'true' || 
+          inputs.Connection_Test == true # Optional: Only run if vars.RUN_CONNECTION_TEST or inputs.Connection_Test is set to true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: python ./src/verify_connection.py
 
-      - name: Run Verification Tests
+      - name: Run Tool Verification Tests
+        if: |
+          vars.RUN_TOOL_VERIFICATION_TEST == 'true' || 
+          inputs.Tools_verification_Test == true # Optional: Only run if vars.RUN_TOOL_VERIFICATION_TEST or inputs.Tools_verification_Test is set to true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -65,6 +103,9 @@ jobs:
         run: python ./src/verify_tools.py
 
       - name: Run Agent Example
+        if: |
+          vars.RUN_AGENT_EXAMPLE_TEST == 'true' ||
+          inputs.Agent_Example_Test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -72,8 +113,42 @@ jobs:
         run: python ./src/agent_example.py
 
       - name: Run Crew
+        if: |
+          vars.RUN_CREW_TEST == 'true' ||
+          inputs.Crew_Test == true
         working-directory: ./
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: python ./src/main.py
+
+  # Job 2: Deploy to AWS ECS Fargate (Only runs when manually triggered via workflow_dispatch)
+  deploy-to-ecs:
+    if: github.event_name == 'workflow_dispatch' && inputs.environment == true
+    needs: terraform-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR [5]
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker Image [5, 12]
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: agentic-ai-app
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./app
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service --cluster agentic-ai-cluster --service agentic-ai
