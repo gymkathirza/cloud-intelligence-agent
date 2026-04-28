@@ -3,3 +3,20 @@ module "dynamodb_table" {
   table_name = var.app_table_name
   env        = var.environment
 }
+
+module "ecr" {
+  source          = "./modules/ecr"
+  repository_name = "agentic-ai-app"
+}
+
+module "ecs" {
+  source             = "./modules/ecs"
+  env                = var.env
+  cluster_name       = "agentic-ai-cluster"
+  repository_url     = module.ecr.repository_url
+  execution_role_arn = var.ecs_execution_role_arn
+  google_api_key     = var.google_api_key
+  aws_region         = var.aws_region
+  subnets            = var.public_subnets
+  security_group_id  = module.network.security_group_id # Assumes a networking module exists
+}
