@@ -5,7 +5,7 @@ FROM hashicorp/terraform:latest as terraform_bin
 FROM python:3.11-slim
 
 # Copy Terraform binary from the first stage
-COPY --from=terraform_bin /bin/terraform /usr/local/bin/terraform
+#COPY --from=terraform_bin /bin/terraform /usr/local/bin/terraform
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
