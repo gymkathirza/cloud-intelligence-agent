@@ -9,6 +9,12 @@ module "ecr" {
   repository_name = "agentic-ai-app"
 }
 
+module "network" {
+  source = "./modules/network"
+  env    = var.env
+  vpc_id = var.vpc_id
+}
+
 module "ecs" {
   source             = "./modules/ecs"
   env                = var.env
@@ -18,5 +24,5 @@ module "ecs" {
   google_api_key     = var.google_api_key
   aws_region         = var.aws_region
   subnets            = var.public_subnets
-  security_group_id  = module.network.security_group_id # Assumes a networking module exists
+  security_group_id  = module.network.security_group_id
 }

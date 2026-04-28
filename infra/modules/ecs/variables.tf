@@ -1,12 +1,16 @@
-variable "environment" {
-  type = string
-}
-
-variable "app_table_name" {
-  type = string
-}
-
 variable "env" {
+  type = string
+}
+
+variable "cluster_name" {
+  type = string
+}
+
+variable "repository_url" {
+  type = string
+}
+
+variable "execution_role_arn" {
   type = string
 }
 
@@ -18,14 +22,10 @@ variable "aws_region" {
   type = string
 }
 
-variable "public_subnets" {
+variable "subnets" {
   type = list(string)
 }
 
-variable "ecs_execution_role_arn" {
-  type = string
-}
-
-variable "vpc_id" {
+variable "security_group_id" {
   type = string
 }
