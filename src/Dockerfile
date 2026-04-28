@@ -17,11 +17,15 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Install Python requirements
-COPY requirements.txt .
+COPY src/requirements.txt .
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the app
-COPY . .
+COPY src .
+
+EXPOSE 8501
 
 # Environment variables will be injected at runtime (from Codespaces or AWS)
-CMD ["python", "src/app.py"]
+CMD ["streamlit", "run", "ui.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -4,3 +4,4 @@ langchain-community
 boto3
 duckduckgo-search
 ddgs
+streamlit
