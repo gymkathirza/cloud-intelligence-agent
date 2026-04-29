@@ -10,9 +10,9 @@ module "ecr" {
 }
 
 module "network" {
-  source = "./modules/network"
-  env    = var.env
-  vpc_id = var.vpc_id
+  source     = "./modules/network"
+  env        = var.env
+  aws_region = var.aws_region
 }
 
 module "ecs" {
@@ -23,6 +23,7 @@ module "ecs" {
   execution_role_arn = var.ecs_execution_role_arn
   google_api_key     = var.google_api_key
   aws_region         = var.aws_region
-  subnets            = var.public_subnets
-  security_group_id  = module.network.security_group_id
+  # Dynamic subnets and security group from the network module
+  subnets           = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
+  security_group_id = module.network.security_group_id
 }

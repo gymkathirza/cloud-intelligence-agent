@@ -64,7 +64,14 @@ jobs:
       # In enterprise, we use -var-file to target specific environments
       - name: Terraform Apply
         working-directory: ./infra
-        run: terraform apply -var-file="envs/prod.tfvars" -auto-approve
+        run: terraform apply -auto-approve \
+            -var-file="envs/prod.tfvars" \
+            -var="google_api_key=${{ secrets.GOOGLE_API_KEY }}"
+        env:
+          # Ensure GitHub can authenticate to AWS via OIDC
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
 
       - name: Populate DynamoDB Sample Data
         working-directory: ./

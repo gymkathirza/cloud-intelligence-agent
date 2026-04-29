@@ -18,14 +18,6 @@ variable "aws_region" {
   type = string
 }
 
-variable "public_subnets" {
-  type = list(string)
-}
-
 variable "ecs_execution_role_arn" {
-  type = string
-}
-
-variable "vpc_id" {
   type = string
 }
