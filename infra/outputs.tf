@@ -18,8 +18,8 @@ output "ecs_service_name" {
   value = module.ecs.service_name
 }
 
-output "ecs_service_arn" {
-  value = module.ecs.service_arn
+output "ecs_service_id" {
+  value = module.ecs.service_id
 }
 
 output "ecs_task_definition_arn" {

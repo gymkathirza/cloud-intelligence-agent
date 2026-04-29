@@ -23,7 +23,6 @@ module "ecs" {
   execution_role_arn = var.ecs_execution_role_arn
   google_api_key     = var.google_api_key
   aws_region         = var.aws_region
-  # Dynamic subnets and security group from the network module
-  subnets           = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
-  security_group_id = module.network.security_group_id
+  subnets            = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
+  security_group_id  = module.network.security_group_id
 }

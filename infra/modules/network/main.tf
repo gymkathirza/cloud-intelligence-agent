@@ -1,7 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
-  tags = { Name = "agentic-ai-vpc-${var.env}" }
+  tags                 = { Name = "agentic-ai-vpc-${var.env}" }
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -14,7 +14,7 @@ resource "aws_subnet" "public_1" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
-  tags = { Name = "public-subnet-1" }
+  tags                    = { Name = "public-subnet-1" }
 }
 
 resource "aws_subnet" "public_2" {
@@ -22,7 +22,7 @@ resource "aws_subnet" "public_2" {
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "${var.aws_region}b"
   map_public_ip_on_launch = true
-  tags = { Name = "public-subnet-2" }
+  tags                    = { Name = "public-subnet-2" }
 }
 
 resource "aws_route_table" "public" {

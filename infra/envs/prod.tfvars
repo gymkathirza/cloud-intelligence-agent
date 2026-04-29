@@ -1,13 +1,13 @@
 # General Environment Settings
-environment    = "production"
-env            = "prod"
+environment = "production"
+env         = "prod"
 
 # DynamoDB Configuration
 # Results in: agentic-ai-data-prod [4]
 app_table_name = "agentic-ai-data"
 
 # AWS Provider Settings
-aws_region     = "us-east-1"
+aws_region = "us-east-1"
 
 # IAM Security Roles
 # Verified Account ID: 639679388423 [1]

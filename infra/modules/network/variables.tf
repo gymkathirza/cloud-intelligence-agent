@@ -2,6 +2,6 @@ variable "env" {
   type = string
 }
 
-variable "vpc_id" {
+variable "aws_region" {
   type = string
 }

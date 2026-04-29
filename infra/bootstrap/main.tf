@@ -5,7 +5,7 @@ provider "aws" {
 # 1. The S3 Bucket for Terraform State
 resource "aws_s3_bucket" "terraform_state" {
   bucket        = "github-cia-unique-tf-state-bucket" # MUST BE GLOBALLY UNIQUE! Add random numbers.
-  force_destroy = true # Ensures easy cleanup when the workshop is over
+  force_destroy = true                                # Ensures easy cleanup when the workshop is over
 }
 
 # Enable Versioning (Crucial for state history)
