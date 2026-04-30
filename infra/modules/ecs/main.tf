@@ -39,6 +39,7 @@ resource "aws_ecs_service" "this" {
   }
 }
 
-resource "aws_iam_service_linked_role" "ecs" {
-  aws_service_name = "ecs.amazonaws.com"
-}
+# Remove this latest. This was used for bootstrap
+#resource "aws_iam_service_linked_role" "ecs" {
+#  aws_service_name = "ecs.amazonaws.com"
+#}
