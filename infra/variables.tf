@@ -17,7 +17,3 @@ variable "google_api_key" {
 variable "aws_region" {
   type = string
 }
-
-variable "ecs_execution_role_arn" {
-  type = string
-}

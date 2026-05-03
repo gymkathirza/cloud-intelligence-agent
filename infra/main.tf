@@ -20,7 +20,7 @@ module "ecs" {
   env                = var.env
   cluster_name       = "agentic-ai-cluster"
   repository_url     = module.ecr.repository_url
-  execution_role_arn = var.ecs_execution_role_arn
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
   google_api_key     = var.google_api_key
   aws_region         = var.aws_region
   subnets            = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
