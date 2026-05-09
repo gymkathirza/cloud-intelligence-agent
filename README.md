@@ -20,7 +20,7 @@ The project follows an enterprise separation of concerns between application and
 
 ```text
 ├── .github/workflows/       # CI/CD pipelines (OIDC, Terraform, Docker) [8]
-├── app/                     # APPLICATION LOGIC [8]
+├── src/                     # APPLICATION LOGIC [8]
 │   ├── crew_logic.py        # Multi-agent definitions and tasks [4, 5]
 │   ├── tools.py             # DynamoDB and Web Search tool integrations [14, 15]
 │   ├── ui.py                # Streamlit web interface [16-18]
