@@ -1,10 +1,10 @@
 resource "aws_dynamodb_table" "this" {
-  name           = "${var.table_name}-${var.env}"
-  billing_mode   = "PAY_PER_REQUEST"
-  
-  hash_key       = "ResourceId"
+  name         = "${var.table_name}"
+  billing_mode = "PAY_PER_REQUEST"
+
+  hash_key = "ResourceId"
   # Range_key (Sort Key)
-  range_key      = "ResourceType"
+  range_key = "ResourceType"
 
   attribute {
     name = "ResourceId"
